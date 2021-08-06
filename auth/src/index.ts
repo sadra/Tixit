@@ -32,6 +32,10 @@ app.all('*', () => {
 app.use(errorHandler);
 
 const start = async () => {
+  if (!process.env.JWT_KEY) {
+    throw new Error('JWt Key is not provided!');
+  }
+
   try {
     await mongoose.connect('mongodb://auth-mongo-cip-srv:27017/auth', {
       useNewUrlParser: true,
