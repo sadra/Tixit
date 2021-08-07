@@ -10,7 +10,7 @@ import { SignUpRouter } from './routes/signup.route';
 import cookieSession from 'cookie-session';
 
 const app = express();
-app.settings('trust proxy', true);
+app.set('trust proxy', true);
 app.use(json());
 app.use(
   cookieSession({
@@ -30,4 +30,4 @@ app.all('*', () => {
 
 app.use(errorHandler);
 
-export { app }
+export { app };
