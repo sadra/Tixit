@@ -10,3 +10,27 @@ it('should returns a 201 on successful signup', async () => {
     })
     .expect(201);
 });
+
+it('should returns a 400 on invalid email', async () => {
+  return request(app)
+    .post('/api/users/signup')
+    .send({
+      email: 'test',
+      password: 'password',
+    })
+    .expect(400);
+});
+
+it('should returns a 400 on invalid password', async () => {
+  return request(app)
+    .post('/api/users/signup')
+    .send({
+      email: 'test@t.com',
+      password: '1',
+    })
+    .expect(400);
+});
+
+it('should returns a 400 with missing email and password', async () => {
+  return request(app).post('/api/users/signup').send({}).expect(400);
+});
