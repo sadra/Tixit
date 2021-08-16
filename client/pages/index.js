@@ -1,4 +1,5 @@
 import axios from 'axios';
+import buildClient from '../api/build-client';
 
 const LandingPage = ({ currentUser }) => {
   console.log(currentUser);
@@ -6,24 +7,12 @@ const LandingPage = ({ currentUser }) => {
   return <h1>Landing Page</h1>;
 };
 
-LandingPage.getInitialProps = async ({ req }) => {
-  let baseUrl = '';
-  let options = {};
+LandingPage.getInitialProps = async ({ context }) => {
+  const client = buildClient(context);
 
-  if (typeof window === undefined) {
-    //SPACENAME.SERVICENAME.svc.cluster.local
-    baseUrl = 'http://ingress-nginx.ingress-nginx-controller.svc.cluster.local';
-    options = {
-      //It has Host and Cookie headers inside
-      headers: req.headers,
-    };
-  }
-
-  const { data } = axios
-    .get(`${baseUrl}/api/users/currentuser`, options)
-    .catch((err) => {
-      console.log(err.message);
-    });
+  const { data } = client.get(`/api/users/currentuser`).catch((err) => {
+    console.log(err.message);
+  });
 
   return data;
 };
