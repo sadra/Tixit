@@ -1,13 +1,20 @@
 import { useState } from 'react';
+import useRequest from '../../hooks/use-request'
 
 const signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {doRequest, errors} = useRequest({
+    url: '/api/users/signup',
+    method: 'post',
+    body: {
+      email, password
+    }
+  });
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-
-    alert(`${email}, ${password}`);
+    doRequest();
   };
 
   return (
@@ -29,6 +36,7 @@ const signup = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+        {errors}
         <button className='btn btn-primary form-control'>Sing Up</button>
       </form>
     </div>
