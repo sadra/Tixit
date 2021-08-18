@@ -5,6 +5,7 @@ import { errorHandler, NotFoundError, UserMiddleware } from '@tixit/common';
 import cookieSession from 'cookie-session';
 import { createTicketRouter } from './routes/new';
 import { showTicketRouter } from './routes/show';
+import { showAllTickets } from './routes';
 
 const app = express();
 app.set('trust proxy', true);
@@ -19,6 +20,7 @@ app.use(
 app.use(UserMiddleware);
 app.use(createTicketRouter);
 app.use(showTicketRouter);
+app.use(showAllTickets);
 
 app.all('*', () => {
   throw new NotFoundError();
