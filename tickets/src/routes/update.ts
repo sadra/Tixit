@@ -37,8 +37,10 @@ router.put(
       throw new NotAuthorizedError();
     }
 
-    ticket.title = title;
-    ticket.price = price;
+    ticket.set({
+      title,
+      price,
+    });
 
     await ticket.save();
 
