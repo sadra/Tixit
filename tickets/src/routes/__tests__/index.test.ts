@@ -1,8 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
-import mongoose from 'mongoose';
 
-describe('Get All Tests', () => {
+describe('Get All Tickets', () => {
   it('should returns a list of tickets', async () => {
     await createTicket('title 1', 10);
     await createTicket('title 2', 20);

@@ -2,7 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
 
-describe('Show Test', () => {
+describe('Show Ticket', () => {
   it('should returns 404 if the ticket is not found', async () => {
     const id = new mongoose.Types.ObjectId().toHexString();
 
