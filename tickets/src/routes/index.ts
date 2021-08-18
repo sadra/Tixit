@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import { NotFoundError } from '@tixit/common';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();
