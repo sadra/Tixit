@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import { app } from '../app';
-import request from 'supertest';
 
 let mongo: any;
 
@@ -37,7 +35,7 @@ declare global {
 
 global.signin = () => {
   const payload = {
-    id: '1123',
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: 'test@t.com',
   };
 
