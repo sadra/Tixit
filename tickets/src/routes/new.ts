@@ -1,9 +1,12 @@
 import express, { Request, Response } from 'express';
 import {
+  NotAuthorizedError,
   RequireAuthMiddleware,
+  UserMiddleware,
   ValidationRequestMiddleware,
 } from '@tixit/common';
 import { body } from 'express-validator';
+import { Ticket } from '../models/ticket';
 
 const router = express.Router();
 
@@ -19,8 +22,18 @@ router.post(
       .withMessage('Price must be grater than 0.'),
   ],
   ValidationRequestMiddleware,
-  (req: Request, res: Response) => {
-    res.sendStatus(200);
+  async (req: Request, res: Response) => {
+    const { title, price } = req.body;
+
+    const ticket = Ticket.build({
+      title,
+      price,
+      userId: req.user!.id,
+    });
+
+    await ticket.save();
+
+    res.status(201).send(ticket);
   }
 );
 
