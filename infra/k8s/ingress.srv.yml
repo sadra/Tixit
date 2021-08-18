@@ -18,6 +18,13 @@ spec:
                 port:
                   number: 3000
           - pathType: Prefix
+            path: '/api/tickets/?(.*)'
+            backend:
+              service:
+                name: tickets-cip-srv
+                port:
+                  number: 3000
+          - pathType: Prefix
             path: '/?(.*)'
             backend:
               service:
