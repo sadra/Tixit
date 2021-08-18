@@ -1,5 +1,4 @@
-import { RequireAuthMiddleware } from './../middlewares/requireAuth.middleware';
-import { UserMiddleware } from './../middlewares/user.middleware';
+import { UserMiddleware, RequireAuthMiddleware } from '@tixit/common';
 import express, { Request, Response } from 'express';
 
 const router = express.Router();

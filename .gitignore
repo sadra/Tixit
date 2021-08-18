@@ -2,3 +2,4 @@ node_modules
 *.secret.yml
 .next
 .vscode
+build

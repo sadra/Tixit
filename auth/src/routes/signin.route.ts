@@ -1,10 +1,9 @@
 import { Password } from './../common/password';
-import { ValidationRequestMiddleware } from './../middlewares/validateRequest.middleware';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { User } from '../models/user.model';
-import { BadRequestError } from '../errors/badRequest.error';
 import jwt from 'jsonwebtoken';
+import { ValidationRequestMiddleware, BadRequestError } from '@tixit/common';
 
 const router = express.Router();
 

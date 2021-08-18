@@ -1,8 +1,7 @@
 import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
-import { errorHandler } from './middlewares/errorHandler.middleware';
-import { NotFoundError } from './errors/notFound.error';
+import { errorHandler, NotFoundError } from '@tixit/common';
 import { CurrentUserRouter } from './routes/currentUser.route';
 import { SignInRouter } from './routes/signin.route';
 import { SignOutRouter } from './routes/signout.route';
