@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+import { natsWrapper } from '../../nats.wrapper';
 
 describe('Update Ticket', () => {
   it('should returns 404 if the ticket is not found', async () => {
@@ -91,5 +92,27 @@ describe('Update Ticket', () => {
     expect(response.status).toEqual(200);
     expect(response.body.title).toEqual('title 1');
     expect(response.body.price).toEqual(10);
+  });
+
+  it('should should publishes events', async () => {
+    const userSession = global.signin();
+
+    const ticket = await request(app)
+      .post('/api/tickets')
+      .set('Cookie', userSession)
+      .send({
+        title: 'dlkjsdlkjs',
+        price: 20,
+      });
+
+    const response = await request(app)
+      .put(`/api/tickets/${ticket.body.id}`)
+      .set('Cookie', userSession)
+      .send({
+        title: 'title 1',
+        price: 10,
+      });
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
   });
 });
