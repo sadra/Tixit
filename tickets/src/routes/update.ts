@@ -1,3 +1,4 @@
+import { natsWrapper } from './../../wrappers/nats.wrapper';
 import express, { Request, Response } from 'express';
 import {
   NotAuthorizedError,
@@ -8,6 +9,7 @@ import {
 } from '@tixit/common';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
+import { TicketUpdatedPublisher } from '../events/publishers/ticketUpdated.publisher';
 
 const router = express.Router();
 
@@ -43,6 +45,13 @@ router.put(
     });
 
     await ticket.save();
+
+    await new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
 
     res.status(200).send(ticket);
   }
