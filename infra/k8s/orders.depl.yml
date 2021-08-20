@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders
+  template:
+    metadata:
+      labels:
+        app: orders
+    spec:
+      containers:
+        - name: orders
+          image: sadra/orders
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://orders-mongo-cip-srv:27017/orders'
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-cip-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'ticketing'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secret-env
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-cip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: orders
+  ports:
+    - name: atuh
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
