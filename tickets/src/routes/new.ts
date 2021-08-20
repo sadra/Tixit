@@ -1,8 +1,8 @@
+import { natsWrapper } from './../../wrappers/nats.wrapper';
+import { TicketCreatedPublisher } from './../events/publishers/ticketCreated.publisher';
 import express, { Request, Response } from 'express';
 import {
-  NotAuthorizedError,
   RequireAuthMiddleware,
-  UserMiddleware,
   ValidationRequestMiddleware,
 } from '@tixit/common';
 import { body } from 'express-validator';
@@ -32,6 +32,13 @@ router.post(
     });
 
     await ticket.save();
+
+    await new TicketCreatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
 
     res.status(201).send(ticket);
   }
