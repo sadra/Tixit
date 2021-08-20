@@ -1,4 +1,4 @@
-import { natsWrapper } from './../../wrappers/nats.wrapper';
+import { natsWrapper } from '../nats.wrapper';
 import express, { Request, Response } from 'express';
 import {
   NotAuthorizedError,

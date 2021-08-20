@@ -1,4 +1,4 @@
-import { natsWrapper } from './../wrappers/nats.wrapper';
+import { natsWrapper } from './nats.wrapper';
 import 'express-async-errors';
 import mongoose from 'mongoose';
 import { app } from './app';
