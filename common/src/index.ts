@@ -10,9 +10,10 @@ export * from './middlewares/requireAuth.middleware';
 export * from './middlewares/user.middleware';
 export * from './middlewares/validateRequest.middleware';
 
-export * from './event-bus/listener.abstract'
-export * from './event-bus/publisher.abstract'
-export * from './event-bus/subjects'
-export * from './event-bus/events/event.interface'
-export * from './event-bus/events/ticketCreated.event'
-export * from './event-bus/events/ticketUpdated.event'
+export * from './event-bus/listener.abstract';
+export * from './event-bus/publisher.abstract';
+export * from './event-bus/subjects';
+export * from './event-bus/events/event.interface';
+export * from './event-bus/events/ticketCreated.event';
+export * from './event-bus/events/ticketUpdated.event';
+export * from './event-bus/types/orderStatus.enum';
