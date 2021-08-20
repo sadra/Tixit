@@ -1,3 +1,4 @@
+import { natsWrapper } from './../wrappers/nats.wrapper';
 import 'express-async-errors';
 import mongoose from 'mongoose';
 import { app } from './app';
@@ -11,6 +12,7 @@ const start = async () => {
   }
 
   try {
+    await natsWrapper.connect('ticketing', 'ljsdf', 'http://nats-cip-srv:4222');
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
