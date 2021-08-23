@@ -47,7 +47,7 @@ router.post(
       expiresAt: expiration,
       ticket
     })
-    await order.save
+    await order.save();
 
     res.status(201).send(order);
   }
