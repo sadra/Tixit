@@ -2,6 +2,7 @@ import { TicketDoc } from './ticket';
 import { OrderStatus } from '@tixit/common';
 import { Document, Model, Schema, model } from 'mongoose';
 
+export {OrderStatus}
 interface OrderAttrs {
   userId: string;
   status: OrderStatus;

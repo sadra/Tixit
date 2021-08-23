@@ -1,9 +1,57 @@
+import mongoose from 'mongoose';
+import { body } from 'express-validator';
+import {
+  BadRequestError,
+  NotFoundError,
+  RequireAuthMiddleware,
+  ValidationRequestMiddleware,
+} from '@tixit/common';
 import express, { Request, Response } from 'express';
+import { Ticket } from '../models/ticket';
+import {Order, OrderStatus} from '../models/order'
 
 const router = express.Router();
 
-router.post('/api/orders', async (req: Request, res: Response) => {
-  res.status(200).send();
-});
+const EXPIRATION_WINDOW_SECONDS = 15 * 60;
+
+router.post(
+  '/api/orders',
+  RequireAuthMiddleware,
+  [
+    body('ticketId')
+      .isObject()
+      .isEmpty()
+      .custom((input: string) => mongoose.Types.ObjectId.isValid(input))
+      .withMessage('TicketID must be provided'),
+  ],
+  ValidationRequestMiddleware,
+  async (req: Request, res: Response) => {
+    const { ticketId } = req.body;
+
+    const ticket = await Ticket.findById(ticketId);
+
+    if (!ticket) {
+      throw new NotFoundError();
+    }
+
+    const isReserved = await ticket.isReserved()
+    if (isReserved) {
+      throw new BadRequestError('Ticket is already reserved');
+    }
+
+    const expiration = new Date()
+    expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
+
+    const order = Order.build({
+      userId: req.user!.id,
+      status: OrderStatus.CREATED,
+      expiresAt: expiration,
+      ticket
+    })
+    await order.save
+
+    res.status(200).send(order);
+  }
+);
 
 export { router as createNewOrderRouter };
