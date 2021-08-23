@@ -4,13 +4,11 @@ import {Order, OrderStatus} from './order'
 interface TicketAttrs {
   title: string;
   price: number;
-  version: number;
 }
 
 export interface TicketDoc extends Document {
   title: string;
   price: number;
-  version: number;
   isReserved(): Promise<boolean>
 }
 
@@ -28,10 +26,6 @@ const ticketSchema = new Schema<TicketDoc>(
       type: Number,
       requires: true,
     },
-    version: {
-      type: Number,
-      required: true,
-    },
   },
   {
     toJSON: {
@@ -48,9 +42,8 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
 };
 
 ticketSchema.methods.isReserved = async function() {
-  
   const existingOrder = await Order.findOne({
-    ticket: this,
+    ticket: this as any,
     status: {
       $in: [
         OrderStatus.CREATED,

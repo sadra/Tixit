@@ -19,7 +19,7 @@ router.post(
   RequireAuthMiddleware,
   [
     body('ticketId')
-      .isObject()
+      .not()
       .isEmpty()
       .custom((input: string) => mongoose.Types.ObjectId.isValid(input))
       .withMessage('TicketID must be provided'),
@@ -29,7 +29,6 @@ router.post(
     const { ticketId } = req.body;
 
     const ticket = await Ticket.findById(ticketId);
-
     if (!ticket) {
       throw new NotFoundError();
     }
@@ -50,7 +49,7 @@ router.post(
     })
     await order.save
 
-    res.status(200).send(order);
+    res.status(201).send(order);
   }
 );
 
