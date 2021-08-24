@@ -1,11 +1,12 @@
-import request from "supertest";
-import { app } from "../../app";
-import { Ticket } from "../../models/ticket";
-import { Order, OrderStatus } from "../../models/order";
+import request from 'supertest';
+import { app } from '../../app';
+import { Ticket } from '../../models/ticket';
+import { Order, OrderStatus } from '../../models/order';
+import { natsWrapper } from '../../nats.wrapper';
 
 const buildTicket = async () => {
   const ticket = Ticket.build({
-    title: "Concert",
+    title: 'Concert',
     price: 20,
   });
   await ticket.save();
@@ -13,21 +14,21 @@ const buildTicket = async () => {
   return ticket;
 };
 
-describe("Delete/Cancel an Order", () => {
-  it("should delete/cancel the order", async () => {
+describe('Delete/Cancel an Order', () => {
+  it('should delete/cancel the order', async () => {
     const ticket = await buildTicket();
 
     const user = global.signin();
 
     const { body: order } = await request(app)
-      .post("/api/orders")
-      .set("Cookie", user)
+      .post('/api/orders')
+      .set('Cookie', user)
       .send({ ticketId: ticket.id })
       .expect(201);
 
     await request(app)
       .delete(`/api/orders/${order.id}`)
-      .set("Cookie", user)
+      .set('Cookie', user)
       .send()
       .expect(204);
 
@@ -36,5 +37,23 @@ describe("Delete/Cancel an Order", () => {
     expect(fetchedOrder!.status).toEqual(OrderStatus.CANCELLED);
   });
 
-  it.todo("emitt an event on cancel order");
+  it('should emmit event on cancel order', async () => {
+    const ticket = await buildTicket();
+
+    const user = global.signin();
+
+    const { body: order } = await request(app)
+      .post('/api/orders')
+      .set('Cookie', user)
+      .send({ ticketId: ticket.id })
+      .expect(201);
+
+    await request(app)
+      .delete(`/api/orders/${order.id}`)
+      .set('Cookie', user)
+      .send()
+      .expect(204);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+  });
 });
