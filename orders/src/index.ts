@@ -1,3 +1,5 @@
+import { TicketUpdatedListener } from './events/listeners/ticketUpdated.listener';
+import { TicketCreatedListener } from './events/listeners/ticketCreated.listener';
 import { natsWrapper } from './nats.wrapper';
 import 'express-async-errors';
 import mongoose from 'mongoose';
@@ -34,6 +36,9 @@ const start = async () => {
 
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
+
+    new TicketCreatedListener(natsWrapper.client).listen();
+    new TicketUpdatedListener(natsWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
