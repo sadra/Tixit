@@ -1,6 +1,6 @@
 {
   "name": "@tixit/common",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "description": "A Ticketing common module",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
