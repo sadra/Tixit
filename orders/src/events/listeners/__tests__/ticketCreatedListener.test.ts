@@ -1,5 +1,5 @@
 import { Message } from 'node-nats-streaming';
-import { TicketCreatedEvent } from './../../../../../common/build/event-bus/events/ticketCreated.event.d';
+import { TicketCreatedEvent } from '@tixit/common';
 import { natsWrapper } from '../../../nats.wrapper';
 import { TicketCreatedListener } from './../ticketCreated.listener';
 import mongoose from 'mongoose';
