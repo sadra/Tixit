@@ -1,4 +1,5 @@
-import mongoose, { Document, Model, Schema, model } from 'mongoose';
+import { versionOCCPlugin } from '@tixit/common';
+import { Document, Model, Schema, model } from 'mongoose';
 import { Order, OrderStatus } from './order';
 
 interface TicketAttrs {
@@ -10,6 +11,7 @@ interface TicketAttrs {
 export interface TicketDoc extends Document {
   title: string;
   price: number;
+  version: number;
   isReserved(): Promise<boolean>;
 }
 
@@ -37,6 +39,9 @@ const ticketSchema = new Schema<TicketDoc>(
     },
   }
 );
+
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(versionOCCPlugin);
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket({
