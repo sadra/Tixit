@@ -5,9 +5,20 @@ import { Ticket } from '../../models/ticket';
 import { Order, OrderStatus } from '../../models/order';
 import { natsWrapper } from '../../nats.wrapper';
 
+const buildTicket = async () => {
+  const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'Concert',
+    price: 20,
+  });
+  await ticket.save();
+
+  return ticket;
+};
+
 describe('Create New Order', () => {
   it('should return error is the ticket does not exist', async () => {
-    const ticketId = mongoose.Types.ObjectId();
+    const ticketId = new mongoose.Types.ObjectId();
 
     await request(app)
       .post('/api/orders')
@@ -17,11 +28,7 @@ describe('Create New Order', () => {
   });
 
   it('should return an error is the ticket is already reserved', async () => {
-    const ticket = Ticket.build({
-      title: 'Concert',
-      price: 20,
-    });
-    await ticket.save();
+    const ticket = await buildTicket();
 
     const order = Order.build({
       ticket,
@@ -39,11 +46,7 @@ describe('Create New Order', () => {
   });
 
   it('should reserves a ticket', async () => {
-    const ticket = Ticket.build({
-      title: 'Concert',
-      price: 20,
-    });
-    await ticket.save();
+    const ticket = await buildTicket();
 
     await request(app)
       .post('/api/orders')
@@ -53,11 +56,7 @@ describe('Create New Order', () => {
   });
 
   it('should emmit event on create order', async () => {
-    const ticket = Ticket.build({
-      title: 'Concert',
-      price: 20,
-    });
-    await ticket.save();
+    const ticket = await buildTicket();
 
     await request(app)
       .post('/api/orders')

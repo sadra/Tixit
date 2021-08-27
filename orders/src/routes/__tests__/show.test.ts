@@ -1,10 +1,12 @@
-import request from "supertest";
-import { app } from "../../app";
-import { Ticket } from "../../models/ticket";
+import request from 'supertest';
+import { app } from '../../app';
+import { Ticket } from '../../models/ticket';
+import mongoose from 'mongoose';
 
 const buildTicket = async () => {
   const ticket = Ticket.build({
-    title: "Concert",
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'Concert',
     price: 20,
   });
   await ticket.save();
@@ -12,35 +14,35 @@ const buildTicket = async () => {
   return ticket;
 };
 
-describe("Get an Order", () => {
-  it("should fetch the order", async () => {
+describe('Get an Order', () => {
+  it('should fetch the order', async () => {
     const ticket = await buildTicket();
 
     const user = global.signin();
 
     const { body: order } = await request(app)
-      .post("/api/orders")
-      .set("Cookie", user)
+      .post('/api/orders')
+      .set('Cookie', user)
       .send({ ticketId: ticket.id })
       .expect(201);
 
     const { body: fetchedOrder } = await request(app)
       .get(`/api/orders/${order.id}`)
-      .set("Cookie", user)
+      .set('Cookie', user)
       .send()
       .expect(200);
 
     expect(fetchedOrder.id).toEqual(order.id);
   });
 
-  it("should returns and error if one user tries to fetch another users order", async () => {
+  it('should returns and error if one user tries to fetch another users order', async () => {
     const ticket = await buildTicket();
 
     const user = global.signin();
 
     const { body: order } = await request(app)
-      .post("/api/orders")
-      .set("Cookie", user)
+      .post('/api/orders')
+      .set('Cookie', user)
       .send({ ticketId: ticket.id })
       .expect(201);
 
@@ -48,7 +50,7 @@ describe("Get an Order", () => {
 
     await request(app)
       .get(`/api/orders/${order.id}`)
-      .set("Cookie", anotherUser)
+      .set('Cookie', anotherUser)
       .send()
       .expect(401);
   });

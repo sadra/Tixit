@@ -1,8 +1,9 @@
 import { TicketDoc } from './ticket';
-import { OrderStatus } from '@tixit/common';
+import { OrderStatus, versionOCCPlugin } from '@tixit/common';
 import { Document, Model, Schema, model } from 'mongoose';
 
 export { OrderStatus };
+
 interface OrderAttrs {
   userId: string;
   status: OrderStatus;
@@ -52,6 +53,9 @@ const orderSchema = new Schema<OrderDoc>(
     },
   }
 );
+
+orderSchema.set('versionKey', 'version');
+orderSchema.plugin(versionOCCPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);
