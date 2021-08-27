@@ -1,5 +1,5 @@
 import { OrderCreatedEvent, OrderStatus } from '@tixit/common';
-import { OrderCreatedListener } from './../orderCreated.listener';
+import { OrderCreatedListener } from '../orderCreated.listener';
 import { Message } from 'node-nats-streaming';
 import { natsWrapper } from '../../../nats.wrapper';
 import mongoose from 'mongoose';
@@ -47,7 +47,7 @@ describe('Order Created Listener', () => {
   });
 
   it('should calls ack the message', async () => {
-    const { listener, ticket, data, msg } = await setup();
+    const { listener, data, msg } = await setup();
 
     await listener.onMessage(data, msg);
 
