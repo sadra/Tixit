@@ -30,6 +30,7 @@
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.12.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.13.5"
+    "mongoose": "^5.13.5",
+    "node-nats-streaming": "^0.3.2"
   }
 }
