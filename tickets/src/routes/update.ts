@@ -1,6 +1,7 @@
 import { natsWrapper } from '../nats.wrapper';
 import express, { Request, Response } from 'express';
 import {
+  BadRequestError,
   NotAuthorizedError,
   NotFoundError,
   RequireAuthMiddleware,
@@ -37,6 +38,10 @@ router.put(
 
     if (ticket.userId !== req.user!.id) {
       throw new NotAuthorizedError();
+    }
+
+    if (ticket.orderId) {
+      throw new BadRequestError('Cannot edit a reserved ticket!');
     }
 
     ticket.set({
