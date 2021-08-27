@@ -19,5 +19,6 @@ export * from './event-bus/events/ticketUpdated.event';
 export * from './event-bus/types/orderStatus.enum';
 export * from './event-bus/events/orderCreated.event';
 export * from './event-bus/events/orderCancelled.event';
+export * from './event-bus/events/expirationComplete.event';
 
 export * from './plugins/versionOCC.plugin';
