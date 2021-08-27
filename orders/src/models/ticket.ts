@@ -17,7 +17,10 @@ export interface TicketDoc extends Document {
 
 interface TicketModel extends Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc;
-  findByEvent(event: {id: string, version: number}): Promise<TicketDoc | null>;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Promise<TicketDoc | null>;
 }
 
 const ticketSchema = new Schema<TicketDoc>(
@@ -52,10 +55,10 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
   });
 };
 
-ticketSchema.statics.findByEvent = (event: {id: string, version: number}) => {
+ticketSchema.statics.findByEvent = (event: { id: string; version: number }) => {
   return Ticket.findOne({
     _id: event.id,
-    version: event.version - 1
+    version: event.version - 1,
   });
 };
 
