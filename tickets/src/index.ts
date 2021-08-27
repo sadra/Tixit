@@ -1,3 +1,5 @@
+import { OrderCreatedListener } from './events/listeners/orderCreated.listener';
+import { OrderCancelledListener } from './events/listeners/orderCancelled.listener';
 import { natsWrapper } from './nats.wrapper';
 import 'express-async-errors';
 import mongoose from 'mongoose';
@@ -31,6 +33,9 @@ const start = async () => {
       console.log('NATS connection closed!');
       process.exit();
     });
+
+    new OrderCreatedListener(natsWrapper.client).listen();
+    new OrderCancelledListener(natsWrapper.client).listen();
 
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
