@@ -54,9 +54,10 @@ describe('Expiration Complete Listener', () => {
 
     await listener.onMessage(data, msg);
 
-    const eventData = (natsWrapper.client.publish as jest.Mock).mock
-    .calls[0][1];
-    
+    const eventData = JSON.parse(
+      (natsWrapper.client.publish as jest.Mock).mock.calls[0][1]
+    );
+
     expect(order.id).toEqual(eventData.id);
   });
 
