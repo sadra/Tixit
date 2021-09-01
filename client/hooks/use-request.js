@@ -1,14 +1,13 @@
-import axios from 'axios';
-import { useState } from 'react';
+import axios from "axios";
+import { useState } from "react";
 
 const useRequest = ({ url, methos, body, onSuccess }) => {
   const [errors, setErrors] = useState(null);
 
-  const doRequest = async () => {
-    setErrors(null);
-
+  const doRequest = async (props = {}) => {
     try {
-      const response = await axios[method](url, body);
+      setErrors(null);
+      const response = await axios[method](url, { ...body, ...props });
 
       if (onSuccess) {
         onSuccess(response.data);
@@ -17,9 +16,9 @@ const useRequest = ({ url, methos, body, onSuccess }) => {
       return response.data;
     } catch (error) {
       setErrors(
-        <div className='alert alert-danger'>
+        <div className="alert alert-danger">
           <h4>Opss...!</h4>
-          <ul className='my-0'>
+          <ul className="my-0">
             {error.response.data.errors.map((err) => (
               <li key={err.message}>{err.message}</li>
             ))}
